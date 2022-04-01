@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GameChacker.Data;
+using GameChacker.Entites;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameChacker.Controllers
 {
@@ -6,16 +9,36 @@ namespace GameChacker.Controllers
     [Route("api/[controller]")]
     public class GameChackController : ControllerBase
     {
-        [HttpGet]
-        public string GetGames()
+        private readonly GameLibraryContext _context;
+
+        public GameChackController(GameLibraryContext context)
         {
-            return "return list of games";
+            _context = context;
         }
 
-        [HttpGet("{complete}")]
-        public string GetCompliteGames(bool complete)
+        [HttpGet]
+        public async Task<ActionResult<List<Game>>> GetGames()
         {
-            return "return list of Complete games";
+            return await GetLibraryGames();
+        }
+
+       
+
+        [HttpGet("{_iscomplete}")]
+        public async Task<ActionResult<List<Game>>> GetCompliteGames(bool _iscomplete)
+        {
+            var games = await GetLibraryGames();
+
+            var _Iscompletegames = games.FirstOrDefault(game => game.IsComplete == _iscomplete);
+
+            return Ok(_Iscompletegames);
+            
+        }
+
+
+        private async Task<List<Game>> GetLibraryGames()
+        {
+            return await _context.Games.ToListAsync();
         }
     }
 }
