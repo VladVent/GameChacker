@@ -1,10 +1,16 @@
 ﻿namespace GameChacker.Entites
 {
-    public class Game
+    public class Game : BaseEntity
     {
-        public int Id { get; set; }
         public string GameName { get; set; }
 
-        public bool IsComplete { get; set; }
+        public string ImageUrl { get; set; }
+        public CompletedGame CompletedGames { get; set; }
+
+        public int CompletedGameId { get; set; }
+
+        public GamePlatform Platform { get; set; }
+
+        public int PlatformID { get; set; }
     }
 }

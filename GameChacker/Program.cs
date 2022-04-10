@@ -1,4 +1,5 @@
 using GameChacker.Data;
+using GameChacker.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddDbContext<GameLibraryContext>(options =>
 {
     options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=GamesDB;Trusted_Connection=True;");
 });
+builder.Services.AddScoped(typeof(IGameRepository), typeof(GameRepository));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
-﻿using GameChacker.Data;
+﻿using GameChacker.Core.Interfaces;
+using GameChacker.Data;
 using GameChacker.Entites;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,17 +10,18 @@ namespace GameChacker.Controllers
     [Route("api/[controller]")]
     public class GameChackController : ControllerBase
     {
-        private readonly GameLibraryContext _context;
+        private readonly IGameRepository _repo;
 
-        public GameChackController(GameLibraryContext context)
+        public GameChackController(IGameRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Game>>> GetGames()
         {
-            return await GetLibraryGames();
+            var games  = await _repo.GetGamesAsync();
+            return Ok(games);
         }
 
        
@@ -27,18 +29,9 @@ namespace GameChacker.Controllers
         [HttpGet("{_iscomplete}")]
         public async Task<ActionResult<List<Game>>> GetCompliteGames(bool _iscomplete)
         {
-            var games = await GetLibraryGames();
-
-            var _Iscompletegames = games.FirstOrDefault(game => game.IsComplete == _iscomplete);
-
-            return Ok(_Iscompletegames);
+            var comp = await _repo.GetGameByCompletedAsync(_iscomplete);
+            return Ok(comp);
             
-        }
-
-
-        private async Task<List<Game>> GetLibraryGames()
-        {
-            return await _context.Games.ToListAsync();
         }
     }
 }
