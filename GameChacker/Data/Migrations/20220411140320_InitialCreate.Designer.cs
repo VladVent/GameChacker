@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameChacker.Data.Migrations
 {
     [DbContext(typeof(GameLibraryContext))]
-    [Migration("20220410145752_InitialCreating")]
-    partial class InitialCreating
+    [Migration("20220411140320_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

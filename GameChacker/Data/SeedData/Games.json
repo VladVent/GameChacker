@@ -1,0 +1,44 @@
+[
+  {
+    "GameName": "DMC: Devil May Cry",
+    "ImageUrl": "img",
+    "CompletedGameId": 1,
+    "PlatformID": 1
+  },
+  {
+    "GameName": "Ori and the will of the wisps",
+    "ImageUrl": "img",
+    "CompletedGameId": 2,
+    "PlatformID": 1
+  },
+  {
+    "GameName": "Lost in the Rain",
+    "ImageUrl": "img",
+    "CompletedGameId": 1,
+    "PlatformID": 4
+  },
+  {
+    "GameName": "Silent Hill",
+    "ImageUrl": "img",
+    "CompletedGameId": 1,
+    "PlatformID": 2
+  },
+  {
+    "GameName": "Dante's Inferno",
+    "ImageUrl": "img",
+    "CompletedGameId": 2,
+    "PlatformID": 4
+  },
+  {
+    "GameName": "Persona 3 PES",
+    "ImageUrl": "img",
+    "CompletedGameId": 1,
+    "PlatformID": 3
+  },
+  {
+    "GameName": "Persona 5",
+    "ImageUrl": "img",
+    "CompletedGameId": 1,
+    "PlatformID": 4
+  }
+]

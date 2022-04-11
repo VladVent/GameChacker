@@ -7,19 +7,36 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IGameRepository ,GameRepository>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddDbContext<GameLibraryContext>(options =>
 {
     options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=GamesDB;Trusted_Connection=True;");
 });
-builder.Services.AddScoped(typeof(IGameRepository), typeof(GameRepository));
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    var servise = scope.ServiceProvider;
+    var loggerFactory = servise.GetService<ILoggerFactory>();
+    try
+    {
+        var context = servise.GetRequiredService<GameLibraryContext>();
+        await GameSeedContext.SeedAsync(context, loggerFactory);
+
+    }
+    catch (Exception ex)
+    {
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogError(ex, "An Error the Migration");
+    }
 }
+
+    // Configure the HTTP request pipeline.
+    if (!app.Environment.IsDevelopment())
+    {
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

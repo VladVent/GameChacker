@@ -20,18 +20,40 @@ namespace GameChacker.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Game>>> GetGames()
         {
-            var games  = await _repo.GetGamesAsync();
+            var games = await _repo.GetGamesAsync();
             return Ok(games);
         }
 
-       
 
-        [HttpGet("{_iscomplete}")]
-        public async Task<ActionResult<List<Game>>> GetCompliteGames(bool _iscomplete)
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<List<Game>>> GetGameById(int Id)
         {
-            var comp = await _repo.GetGameByCompletedAsync(_iscomplete);
-            return Ok(comp);
-            
+            var game = await _repo.GetGameByIdAsync(Id);
+            return Ok(game);
+
         }
+
+        [HttpGet("platform")]
+
+        public async Task<ActionResult<IReadOnlyList<GamePlatform>>> GetGamePlatforms()
+        {
+            return Ok(await _repo.GetGamePlatformsAsync());
+        }
+
+        [HttpGet("completed")]
+
+        public async Task<ActionResult<IReadOnlyList<CompletedGame>>> GetCompletedGame()
+        {
+            return Ok(await _repo.GetCompletedGamesAsync());
+        }
+
+        [HttpGet("game/{comp}")]
+
+        public async Task<ActionResult<IReadOnlyList<Game>>> GetAllCompletedGames(bool comp)
+        {
+            return Ok(await _repo.GetGameByCompletedAsync(comp));            
+        }
+
     }
 }

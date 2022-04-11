@@ -13,19 +13,43 @@ namespace GameChacker.Data
             _context = context;
         }
 
-        public async Task<Game> GetGameByCompletedAsync(bool com)
+        public async Task<IReadOnlyList<CompletedGame>> GetCompletedGamesAsync()
+        {
+            return await _context.CompletedGames.ToListAsync();
+        }
+
+        public async Task<Game> GetGameByCompletedAsync(int com)
         {
             return await _context.Games.FindAsync(com);
         }
 
-        public Task<Game> GetGameByIdAsync(int id)
+        public async Task<Game> GetGameByCompletedAsync(bool compl)
         {
-            throw new NotImplementedException();
+            return await _context.Games
+                 .Include(g => g.CompletedGames)
+                 .Include(g => g.Platform)
+                 .FirstOrDefaultAsync(g => g.CompletedGames.IsGameCompleted == compl);
+        }
+
+        public async Task<Game> GetGameByIdAsync(int id)
+        {
+            return await _context.Games
+                .Include(g => g.CompletedGames)
+                .Include(g => g.Platform)
+                .FirstOrDefaultAsync(g=>g.Id == id);
+        }
+
+        public async Task<IReadOnlyList<GamePlatform>> GetGamePlatformsAsync()
+        {
+            return await _context.GamePlatforms.ToListAsync();
         }
 
         public async Task<IReadOnlyList<Game>> GetGamesAsync()
         {
-            return await _context.Games.ToListAsync();
+            return await _context.Games
+                .Include(g=> g.CompletedGames)
+                .Include(g => g.Platform)
+                .ToListAsync();
         }
     }
 }
