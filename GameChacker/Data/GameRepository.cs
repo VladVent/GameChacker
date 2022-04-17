@@ -23,12 +23,12 @@ namespace GameChacker.Data
             return await _context.Games.FindAsync(com);
         }
 
-        public async Task<Game> GetGameByCompletedAsync(bool compl)
+        public async Task<IReadOnlyList<Game>> GetGameByCompletedAsync(bool compl)
         {
             return await _context.Games
                  .Include(g => g.CompletedGames)
                  .Include(g => g.Platform)
-                 .FirstOrDefaultAsync(g => g.CompletedGames.IsGameCompleted == compl);
+                 .Where(g => g.CompletedGames.IsGameCompleted == compl).ToListAsync();
         }
 
         public async Task<Game> GetGameByIdAsync(int id)
@@ -46,6 +46,12 @@ namespace GameChacker.Data
 
         public async Task<IReadOnlyList<Game>> GetGamesAsync()
         {
+            var completeId = 1;
+
+            var games = _context.Games.
+                Where(x => x.CompletedGameId == completeId).Include(x=>x.CompletedGames).ToListAsync();
+
+
             return await _context.Games
                 .Include(g=> g.CompletedGames)
                 .Include(g => g.Platform)

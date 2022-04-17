@@ -1,6 +1,8 @@
 using GameChacker.Data;
 using GameChacker.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using GameChacker.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IGameRepository ,GameRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDbContext<GameLibraryContext>(options =>
 {
     options.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=GamesDB;Trusted_Connection=True;");
@@ -42,6 +45,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseStaticFiles();
 
 app.MapControllerRoute(
     name: "default",
